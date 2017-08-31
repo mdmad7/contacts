@@ -11,6 +11,7 @@ export default class ContactList extends Component {
     this.state = {
       contacts: undefined,
       searchword: "",
+      filtered: [],
     };
 
     this.handleChange = this.handleChange.bind(this);
@@ -18,7 +19,6 @@ export default class ContactList extends Component {
 
   handleChange(searchword) {
     this.setState({ searchword: searchword }, () => {
-      console.log(this.state.searchword);
 
       let word = this.state.contacts.filter(
         contact =>
@@ -29,9 +29,10 @@ export default class ContactList extends Component {
             .toLowerCase()
             .indexOf(this.state.searchword.toLowerCase()) > -1
       );
-      this.setState({
-        contacts: [...word],
-      });
+      this.setState(
+        {
+          filtered: [...word],
+        });
     });
   }
 
@@ -41,6 +42,7 @@ export default class ContactList extends Component {
       .then(response => {
         this.setState({
           contacts: response.data.results,
+          filtered: response.data.results,
         });
       })
       .catch(error => {
@@ -59,9 +61,10 @@ export default class ContactList extends Component {
             />
           ) : null}
           <ul>
-            {this.state.contacts !== undefined ? (
-              <Contact contacts={this.state.contacts} />
-            ) : null}
+            {/* {this.state.contacts !== undefined ? (
+              
+            ) : null} */}
+            <Contact contacts={this.state.filtered} />
           </ul>
         </div>
       </div>

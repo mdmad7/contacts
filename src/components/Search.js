@@ -7,7 +7,6 @@ export default class SearchBar extends Component {
   }
 
   getSearchWord(e) {
-    console.log(this.props.handleChange)
     this.props.handleChange(e.target.value)
   }
   render() {
