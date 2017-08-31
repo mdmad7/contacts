@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import axios from "axios";
 
 import Contact from "./Contact";
+import Search from "./Search";
 
 export default class ContactList extends Component {
   constructor(props) {
@@ -9,14 +10,37 @@ export default class ContactList extends Component {
 
     this.state = {
       contacts: undefined,
+      searchword: "",
     };
+
+    this.handleChange = this.handleChange.bind(this);
   }
+
+  handleChange(searchword) {
+    this.setState({ searchword: searchword }, () => {
+      console.log(this.state.searchword);
+
+      let word = this.state.contacts.filter(
+        contact =>
+          contact.name.first
+            .toLowerCase()
+            .indexOf(this.state.searchword.toLowerCase()) > -1 ||
+          contact.name.last
+            .toLowerCase()
+            .indexOf(this.state.searchword.toLowerCase()) > -1
+      );
+      this.setState({
+        contacts: [...word],
+      });
+    });
+  }
+
   componentDidMount() {
     axios
-      .get("https://randomuser.me/api/?results=20")
+      .get("https://randomuser.me/api/?results=100")
       .then(response => {
         this.setState({
-          contacts: response.data,
+          contacts: response.data.results,
         });
       })
       .catch(error => {
@@ -27,20 +51,18 @@ export default class ContactList extends Component {
   render() {
     return (
       <div className="contact-app">
-        <div className="row">
-          <div className="col-12">
-            <h1>Contact App List</h1>
-          </div>
-        </div>
-
-        <div className="row">
-          <div className="col-12">
-            <ul>
-              {this.state.contacts !== undefined ? (
-                <Contact contacts={this.state.contacts} />
-              ) : null}
-            </ul>
-          </div>
+        <div className="contact-app-card">
+          {this.state.contacts !== undefined ? (
+            <Search
+              handleChange={this.handleChange}
+              searchword={this.state.searchword}
+            />
+          ) : null}
+          <ul>
+            {this.state.contacts !== undefined ? (
+              <Contact contacts={this.state.contacts} />
+            ) : null}
+          </ul>
         </div>
       </div>
     );

@@ -1,12 +1,13 @@
-import React from 'react'
-import ContactList from './components/ContactList'
+import React from "react";
+import ContactList from "./components/ContactList";
 
-function App() {
+const App = () => {
   return (
     <div>
+      <h1>Contact App List</h1>
       <ContactList />
     </div>
-  )
+  );
 }
 
-export default App
+export default App;
